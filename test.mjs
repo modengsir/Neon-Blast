@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {Game} from './engine.mjs';
+const fresh=()=>{let g=new Game();g.state='playing';return g;};
+let g=fresh();g.move(-1,0);assert.deepEqual(g.player,{x:1,z:1});g.move(1,0);g.move(1,0);assert.equal(g.player.x,2);
+g=fresh();g.place();g.place();assert.equal(g.bombs.length,1);g.state='paused';g.tick(1);assert.equal(g.bombs[0].t,2);assert.equal(g.time,90);
+g=fresh();g.player={x:2,z:1};g.place();g.player={x:1,z:2};g.tick(2.01);assert.equal(g.grid[1][3],0);assert.equal(g.grid[1][5],2);assert.equal(g.score,50);assert.equal(g.state,'playing');assert(!g.flames.some(f=>f.x===2&&f.z===3));
+g=fresh();g.grid[1][3]=0;g.player={x:1,z:1};g.place();g.player={x:3,z:1};g.place();g.bombs[1].t=5;g.player={x:1,z:3};g.tick(2.01);assert.equal(g.bombs.length,0);
+g=fresh();g.place();g.tick(2.01);assert.equal(g.state,'lost');
+g=fresh();g.enemies=[{x:2,z:1,clock:10}];g.player={x:1,z:1};g.place();g.player={x:1,z:4};g.tick(2.01);assert.equal(g.enemies.length,0);g.player={x:9,z:9};g.hit();assert.equal(g.state,'won');
+g=fresh();g.time=.01;g.tick(.02);assert.equal(g.state,'lost');g.reset();assert.equal(g.time,90);assert.equal(g.enemies.length,2);assert.equal(g.score,0);
+g=fresh();g.grid[1][3]=0;g.grid[2][3]=0;g.enemies=[{x:2,z:1,clock:0}];g.bombs=[{x:1,z:1,t:2}];g.player={x:1,z:3};g.tick(.1);assert.equal(g.enemies[0].x,3);
+console.log('PASS: collision, bomb limit, pause, crate/wall blocking, chain reaction, self damage, enemy kill, victory, timeout, reset, AI escape');
