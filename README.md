@@ -1,4 +1,6 @@
 # Neon Blast · 方块爆破
+<img width="1978" height="1240" alt="image" src="https://github.com/user-attachments/assets/879c7a34-2560-4631-bd03-6cf494a410be" />
+
 
 一个打开浏览器就能玩的 3D 网页小游戏。固定 11×11 地图、90 秒倒计时、两个机器人敌人，无后端、无需账号，不调用模型 API。
 
